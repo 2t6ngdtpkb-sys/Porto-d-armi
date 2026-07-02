@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Esame Porto d'Armi — Svizzera</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --accent: #c0392b;
+    --gold: #e67e22;
+    --green: #27ae60;
+    --light: #f4f6f9;
+    --card: #ffffff;
+    --border: #dde3ec;
+    --text: #1e2a38;
+    --muted: #6b7a8d;
+    --shadow: 0 2px 12px rgba(26,58,92,0.10);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--light);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+    color: #fff;
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.18);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-flag { font-size: 2rem; }
+  .header-title { flex: 1; }
+  .header-title h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.3px; }
+  .header-title p { font-size: 0.78rem; opacity: 0.75; margin-top: 2px; }
+  .header-stats {
+    display: flex; gap: 12px; align-items: center;
+  }
+  .stat-badge {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  #global-progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    position: relative;
+  }
+  #global-progress-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* ===== NAV TABS ===== */
+  nav {
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 16px;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 14px 18px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--primary); }
+  .nav-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  main { max-width: 960px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* ===== SECTION ===== */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  /* ===== DASHBOARD ===== */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .kpi-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+    border-left: 5px solid var(--primary);
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi-card.green { border-left-color: var(--green); }
+  .kpi-card.gold { border-left-color: var(--gold); }
+  .kpi-card.red { border-left-color: var(--accent); }
+  .kpi-label { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-value { font-size: 2rem; font-weight: 800; color: var(--primary); margin-top: 4px; }
+  .kpi-card.green .kpi-value { color: var(--green); }
+  .kpi-card.gold .kpi-value { color: var(--gold); }
+  .kpi-card.red .kpi-value { color: var(--accent); }
+  .kpi-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .cat-btn {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .cat-btn:hover { border-color: var(--primary); background: #eef3fa; }
+  .cat-btn .cat-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+  .cat-btn .cat-count { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+  .cat-btn .cat-progress-mini {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .cat-btn .cat-progress-mini-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 2px;
+    transition: width 0.4s;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ===== FLASHCARD ===== */
+  .flashcard-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+  .btn {
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.18s;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #2c5282; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #a93226; }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { background: #219a52; }
+  .btn-gold { background: var(--gold); color: #fff; }
+  .btn-gold:hover { background: #ca6f1e; }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text);
+  }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+  .btn-sm { padding: 6px 12px; font-size: 0.78rem; }
+
+  select.filter-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+  }
+  select.filter-select:focus { border-color: var(--primary); }
+
+  .flashcard-wrap {
+    perspective: 1000px;
+    margin-bottom: 16px;
+  }
+  .flashcard {
+    position: relative;
+    min-height: 200px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    min-height: 200px;
+    backface-visibility: hidden;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+    color: #fff;
+    box-shadow: var(--shadow);
+  }
+  .flashcard-back {
+    background: linear-gradient(135deg, var(--green) 0%, #1e8449 100%);
+    color: #fff;
+    transform: rotateY(180deg);
+    box-shadow: var(--shadow);
+  }
+  .flashcard-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  .flashcard-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+  .flashcard-hint {
+    margin-top: 16px;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-align: center;
+  }
+  .flashcard-cat-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+  .flashcard-counter {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .flashcard-nav {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+  .fc-feedback {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+
+  /* ===== QUIZ ===== */
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .quiz-progress-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--gold));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  .quiz-question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .quiz-question-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .quiz-question-text {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-option {
+    background: #f7f9fc;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.18s;
+    line-height: 1.45;
+  }
+  .quiz-option:hover:not(.disabled) { border-color: var(--primary); background: #eef3fa; }
+  .quiz-option.correct { border-color: var(--green); background: #eafaf1; color: #1a5c36; }
+  .quiz-option.wrong { border-color: var(--accent); background: #fdf2f2; color: #922b21; }
+  .quiz-option.disabled { cursor: default; }
+  .quiz-feedback {
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-top: 10px;
+    display: none;
+    line-height: 1.5;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #eafaf1; border: 1.5px solid var(--green); color: #1a5c36; }
+  .quiz-feedback.wrong { background: #fdf2f2; border: 1.5px solid var(--accent); color: #922b21; }
+  .quiz-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .quiz-score-card {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .quiz-score-big { font-size: 4rem; font-weight: 900; color: var(--primary); }
+  .quiz-score-label { font-size: 1rem; color: var(--muted); margin-top: 4px; }
+  .quiz-score-msg { font-size: 1.1rem; font-weight: 600; margin-top: 16px; }
+
+  /* ===== LISTA DOMANDE ===== */
+  .qa-item {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .qa-item:hover { box-shadow: 0 4px 20px rgba(26,58,92,0.15); }
+  .qa-question {
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .qa-num {
+    min-width: 28px;
+    height: 28px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .qa-cat-tag {
+    display: inline-block;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+  .qa-answer {
+    display: none;
+    padding: 0 18px 16px 58px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+    background: #f7fbff;
+  }
+  .qa-answer.open { display: block; }
+  .qa-answer-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--green);
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+  .qa-arrow {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-item.memorized .qa-num { background: var(--green); }
+  .qa-item.memorized { border-left: 4px solid var(--green); }
+
+  /* ===== RIASSUNTO ===== */
+  .summary-section { margin-bottom: 24px; }
+  .summary-section h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .summary-table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .summary-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .summary-table tr:nth-child(even) td { background: #f7f9fc; }
+  .summary-table tr:hover td { background: #eef3fa; }
+  .highlight-box {
+    background: #fff8e1;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .highlight-box strong { color: var(--accent); }
+  .info-box {
+    background: #e8f4fd;
+    border-left: 4px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .danger-box {
+    background: #fdf2f2;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  /* ===== SEARCH ===== */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 11px 16px 11px 40px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    background: #fff;
+  }
+  .search-input:focus { border-color: var(--primary); }
+  .search-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* ===== TIMER ===== */
+  .timer-badge {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-badge.warning { background: var(--accent); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .header-stats { display: none; }
+    .dashboard-grid { grid-template-columns: 1fr 1fr; }
+    .cat-grid { grid-template-columns: 1fr 1fr; }
+    .flashcard-text { font-size: 0.95rem; }
+    .quiz-question-text { font-size: 0.92rem; }
+  }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--primary);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    z-index: 999;
+    max-width: 280px;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.green { background: var(--green); }
+  #toast.red { background: var(--accent); }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+
+  /* ===== CHIP FILTER ===== */
+  .chip-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .chip {
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: #fff;
+    color: var(--text);
+  }
+  .chip:hover { border-color: var(--primary); color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-flag">🇨🇭</div>
+  <div class="header-title">
+    <h1>Studio Esame Porto d'Armi</h1>
+    <p>Confederazione Svizzera — 106 domande ufficiali</p>
+  </div>
+  <div class="header-stats">
+    <span class="stat-badge" id="hdr-memorized">✓ 0 memorizzate</span>
+    <span class="stat-badge" id="hdr-score">Quiz: —</span>
+  </div>
+</header>
+<div id="global-progress-bar"><div id="global-progress-fill"></div></div>
+
+<nav>
+  <div class="nav-tab active" onclick="showSection('dashboard')">🏠 Dashboard</div>
+  <div class="nav-tab" onclick="showSection('flashcard')">🃏 Flashcard</div>
+  <div class="nav-tab" onclick="showSection('quiz')">🎯 Quiz</div>
+  <div class="nav-tab" onclick="showSection('lista')">📋 Tutte le Domande</div>
+  <div class="nav-tab" onclick="showSection('riassunto')">📖 Riassunto Rapido</div>
+</nav>
+
+<main>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="sec-dashboard" class="section active">
+  <div class="dashboard-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Domande Totali</div>
+      <div class="kpi-value">106</div>
+      <div class="kpi-sub">7 categorie tematiche</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Memorizzate</div>
+      <div class="kpi-value" id="kpi-mem">0</div>
+      <div class="kpi-sub" id="kpi-mem-pct">0% del totale</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">Miglior Quiz</div>
+      <div class="kpi-value" id="kpi-best">—</div>
+      <div class="kpi-sub" id="kpi-best-sub">nessun quiz completato</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Da Ripassare</div>
+      <div class="kpi-value" id="kpi-todo">106</div>
+      <div class="kpi-sub">domande non ancora studiate</div>
+    </div>
+  </div>
+
+  <div class="section-title">📂 Studia per Categoria</div>
+  <div class="cat-grid" id="cat-grid"></div>
+
+  <div class="section-title">⚡ Azioni Rapide</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+    <button class="btn btn-primary" onclick="startFlashcardAll()">🃏 Flashcard — Tutte</button>
+    <button class="btn btn-accent" onclick="startQuizAll()">🎯 Quiz Veloce (20 dom.)</button>
+    <button class="btn btn-gold" onclick="startQuizWeak()">⚠️ Ripassa i Punti Deboli</button>
+    <button class="btn btn-outline" onclick="resetProgress()">🔄 Azzera Progressi</button>
+  </div>
+
+  <div class="section-title">📊 Progressi per Categoria</div>
+  <div id="cat-progress-list"></div>
+</div>
+
+<!-- ===== FLASHCARD ===== -->
+<div id="sec-flashcard" class="section">
+  <div class="flashcard-controls">
+    <select class="filter-select" id="fc-cat-filter" onchange="initFlashcards()">
+      <option value="all">Tutte le categorie</option>
+    </select>
+    <button class="btn btn-outline btn-sm" onclick="shuffleFlashcards()">🔀 Mescola</button>
+    <button class="btn btn-outline btn-sm" onclick="initFlashcards()">↺ Riparti</button>
+    <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer;">
+      <input type="checkbox" id="fc-only-unmem" onchange="initFlashcards()" style="cursor:pointer;"> Solo non memorizzate
+    </label>
+  </div>
+  <div class="flashcard-counter" id="fc-counter">Domanda 1 di 106</div>
+  <div class="flashcard-wrap">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="flashcard-front" id="fc-front">
+        <div class="flashcard-cat-tag" id="fc-cat-tag">Categoria</div>
+        <div class="flashcard-label">DOMANDA</div>
+        <div class="flashcard-text" id="fc-question">Caricamento...</div>
+        <div class="flashcard-hint">👆 Tocca per vedere la risposta</div>
+      </div>
+      <div class="flashcard-back" id="fc-back">
+        <div class="flashcard-cat-tag" id="fc-cat-tag-back">Categoria</div>
+        <div class="flashcard-label">RISPOSTA CORRETTA</div>
+        <div class="flashcard-text" id="fc-answer">...</div>
+        <div class="flashcard-hint">👆 Tocca per tornare alla domanda</div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-feedback">
+    <button class="btn btn-accent" onclick="fcFeedback(false)">✗ Non sapevo</button>
+    <button class="btn btn-green" onclick="fcFeedback(true)">✓ Sapevo!</button>
+  </div>
+  <div class="flashcard-nav">
+    <button class="btn btn-outline" onclick="fcPrev()">← Precedente</button>
+    <button class="btn btn-primary" onclick="fcNext()">Successiva →</button>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="sec-quiz" class="section">
+  <div id="quiz-setup" class="card">
+    <div class="section-title">🎯 Configura il Quiz</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+      <div>
+        <label style="font-size:0.8rem;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;">CATEGORIA</label>
+        <select class="filter-select" id="quiz-cat-filter">
+          <option value="all">Tutte</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.8rem;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;">N° DOMANDE</label>
+        <select class="filter-select" id="quiz-count">
+          <option value="10">10</option>
+          <option value="20" selected>20</option>
+          <option value="30">30</option>
+          <option value="50">50</option>
+          <option value="106">Tutte (106)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.8rem;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;">MODALITÀ</label>
+        <select class="filter-select" id="quiz-mode">
+          <option value="normal">Normale</option>
+          <option value="timed">A tempo (30s/dom.)</option>
+          <option value="weak">Solo punti deboli</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startQuiz()">▶ Inizia Quiz</button>
+  </div>
+
+  <div id="quiz-area" style="display:none;">
+    <div class="quiz-header">
+      <div>
+        <span style="font-size:0.8rem;font-weight:700;color:var(--muted);">DOMANDA </span>
+        <span id="quiz-qnum" style="font-weight:800;color:var(--primary);">1</span>
+        <span style="font-size:0.8rem;color:var(--muted);"> / </span>
+        <span id="quiz-qtot" style="font-size:0.8rem;color:var(--muted);">20</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span style="font-size:0.8rem;color:var(--green);font-weight:700;">✓ <span id="quiz-correct-count">0</span></span>
+        <span style="font-size:0.8rem;color:var(--accent);font-weight:700;">✗ <span id="quiz-wrong-count">0</span></span>
+        <div class="timer-badge" id="quiz-timer" style="display:none;">30</div>
+      </div>
+    </div>
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" id="quiz-prog-fill" style="width:0%"></div>
+    </div>
+    <div class="quiz-question-card">
+      <div class="quiz-question-num" id="quiz-cat-label">CATEGORIA</div>
+      <div class="quiz-question-text" id="quiz-q-text">Domanda...</div>
+    </div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" id="quiz-next-btn" onclick="quizNext()" style="display:none;">Prossima →</button>
+      <button class="btn btn-outline btn-sm" onclick="quizAbort()">✕ Interrompi</button>
+    </div>
+  </div>
+
+  <div id="quiz-result" style="display:none;" class="card quiz-score-card">
+    <div style="font-size:2rem;margin-bottom:8px;">🏆</div>
+    <div class="quiz-score-big" id="res-score">0/0</div>
+    <div class="quiz-score-label">risposte corrette</div>
+    <div class="quiz-score-msg" id="res-msg"></div>
+    <div style="margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="startQuiz()">🔁 Nuovo Quiz</button>
+      <button class="btn btn-gold" onclick="showSection('flashcard')">🃏 Ripassa con Flashcard</button>
+      <button class="btn btn-outline" onclick="document.getElementById('quiz-setup').style.display='block';document.getElementById('quiz-result').style.display='none';">⚙ Configura</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LISTA ===== -->
+<div id="sec-lista" class="section">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="search-input" placeholder="Cerca domanda o parola chiave..." oninput="filterList()">
+  </div>
+  <div class="chip-row" id="list-chips"></div>
+  <div id="qa-list"></div>
+</div>
+
+<!-- ===== RIASSUNTO ===== -->
+<div id="sec-riassunto" class="section">
+
+  <div class="summary-section">
+    <h3>⚖️ Legittima Difesa — Concetti Chiave</h3>
+    <div class="info-box">
+      <strong>Definizione:</strong> Il diritto di respingere un'aggressione ingiusta con mezzi proporzionali alle circostanze. Può essere esercitato <strong>solo durante l'aggressione</strong>.
+    </div>
+    <div class="highlight-box">
+      <strong>Regola d'oro:</strong> I mezzi di difesa devono essere <strong>proporzionati</strong> all'aggressione. Non si può mettere in pericolo la vita di terzi estranei per difendere beni patrimoniali.
+    </div>
+    <div class="danger-box">
+      <strong>ATTENZIONE — Eccesso di legittima difesa:</strong> Sparare a un ladro in fuga, inseguire con un'auto un rapinatore, sparare a persona disarmata che scappa = <strong>reato penale</strong>.
+    </div>
+    <table class="summary-table">
+      <thead><tr><th>Situazione</th><th>Lecito?</th><th>Motivazione</th></tr></thead>
+      <tbody>
+        <tr><td>Sparare a ladro armato che ti minaccia in casa</td><td>✅ Sì</td><td>Legittima difesa proporzionata</td></tr>
+        <tr><td>Sparare a ladro in fuga con i tuoi gioielli</td><td>❌ No</td><td>Sproporzionato, eccesso di LD</td></tr>
+        <tr><td>Mostrare l'arma a chi ti minaccia verbalmente</td><td>✅ Sì</td><td>Se hai porto d'armi valido</td></tr>
+        <tr><td>Colpo d'avvertimento contro ragazzi che fanno graffiti</td><td>❌ No</td><td>Sproporzionato, pericolo per terzi</td></tr>
+        <tr><td>Tenere sotto tiro ladro disarmato in casa</td><td>✅ Sì</td><td>Fino all'arrivo della polizia</td></tr>
+        <tr><td>Sparare a spacciatore per vendetta morale</td><td>❌ No</td><td>Nessuna aggressione ingiusta in corso</td></tr>
+        <tr><td>Abbattere cane aggressivo che attacca un terzo</td><td>✅ Sì</td><td>Atto proporzionato di LD</td></tr>
+        <tr><td>Sparare a cane in fuga che ha rubato l'arrosto</td><td>❌ No</td><td>Sproporzionato, eccesso di LD</td></tr>
+        <tr><td>Estrarre pistola contro motociclisti su proprietà privata</td><td>❌ No</td><td>Sproporzionato</td></tr>
+        <tr><td>Colpo d'avvertimento per sedare rissa al night club</td><td>❌ No</td><td>Pericolo per terzi non implicati</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary-section">
+    <h3>🚨 Stato di Necessità</h3>
+    <div class="info-box">
+      <strong>Definizione:</strong> Chiunque commette un reato per preservare un bene giuridico proprio o altrui da un pericolo imminente e non altrimenti evitabile agisce lecitamente se in tal modo salvaguarda <strong>interessi preponderanti</strong>.
+    </div>
+    <table class="summary-table">
+      <thead><tr><th>Esempio</th><th>Esito</th></tr></thead>
+      <tbody>
+        <tr><td>Sparare sulla serratura per salvare bambino in casa in fiamme</td><td>✅ Stato di necessità</td></tr>
+        <tr><td>Sparare su toro che carica bambini (dopo essersi accertato di non colpire persone)</td><td>✅ Lecito</td></tr>
+        <tr><td>Rubare una bicicletta per fuggire da un aggressore armato di coltello</td><td>✅ Proporzionato allo stato di necessità</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary-section">
+    <h3>📜 Permessi e Acquisto Armi</h3>
+    <table class="summary-table">
+      <thead><tr><th>Argomento</th><th>Regola</th></tr></thead>
+      <tbody>
+        <tr><td>Età minima per permesso d'acquisto</td><td>18 anni</td></tr>
+        <tr><td>Max armi acquistabili con un permesso</td><td>3 armi</td></tr>
+        <tr><td>Durata max permesso di porto d'armi</td><td>5 anni</td></tr>
+        <tr><td>Conservazione contratto scritto di vendita</td><td>Almeno 10 anni</td></tr>
+        <tr><td>Copia permesso d'acquisto all'autorità</td><td>Entro 30 giorni dalla vendita</td></tr>
+        <tr><td>Fucile a pompa</td><td>Richiede permesso d'acquisto</td></tr>
+        <tr><td>Moschetto 31 (arma d'ordinanza svizzera)</td><td>NON richiede permesso d'acquisto</td></tr>
+        <tr><td>Arma modificata da automatica a semiautomatica (non ordinanza)</td><td>Autorizzazione cantonale eccezionale</td></tr>
+        <tr><td>Fucile d'assalto d'ordinanza in condizioni originali</td><td>Autorizzazione cantonale eccezionale</td></tr>
+        <tr><td>Arma corta per tiro a raffica</td><td>Autorizzazione cantonale eccezionale</td></tr>
+        <tr><td>Custodia arma modificata da automatica</td><td>Otturatore sottochiave, separato dall'arma</td></tr>
+      </tbody>
+    </table>
+    <div class="highlight-box">
+      <strong>Condizioni per il permesso d'acquisto:</strong> Maggiore età (18+) · Casellario giudiziale pulito da reati violenti o delitti ripetuti · Non sotto curatela generale · Non pericoloso per sé o terzi · Scopo: sport, caccia o collezionismo.
+    </div>
+  </div>
+
+  <div class="summary-section">
+    <h3>🛃 Porto, Trasporto e Dogana</h3>
+    <table class="summary-table">
+      <thead><tr><th>Situazione</th><th>Regola</th></tr></thead>
+      <tbody>
+        <tr><td>Trasporto arma verso stand di tiro (senza porto d'armi per quel tipo)</td><td>Arma e munizioni separate, niente nel caricatore, solo per il tempo necessario</td></tr>
+        <tr><td>Rientro in Svizzera con pistola sportiva da gara all'estero</td><td>No dichiarazione doganale se si usa carta europea d'arma da fuoco</td></tr>
+        <tr><td>Arma a gas con tubo di lancio pirotecnico in pubblico</td><td>Sì, con permesso di porto d'armi</td></tr>
+        <tr><td>Trasporto arma ad aria compressa/CO2</td><td>Solo per recarsi a manifestazione specializzata</td></tr>
+        <tr><td>Importazione armi a gas in Svizzera</td><td>Autorizzazione d'importazione + dichiarazione doganale</td></tr>
+        <tr><td>Pugnale simmetrico acquistato prima del 1.1.1999</td><td>Non portabile dopo tale data senza permesso di porto d'armi</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary-section">
+    <h3>🔫 Classificazione delle Armi</h3>
+    <table class="summary-table">
+      <thead><tr><th>Oggetto</th><th>Classificazione</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Spray autodifesa CN</td><td>Arma</td><td>Richiede permesso d'acquisto</td></tr>
+        <tr><td>Pugnale simmetrico lama > 5cm</td><td>Arma</td><td>Importazione: aut. eccezionale Cantone + Ufficio Armi</td></tr>
+        <tr><td>Pugnale asimmetrico con dorso a sega</td><td>NON arma</td><td>Importabile senza autorizzazione</td></tr>
+        <tr><td>Coltello serramanico non automatico</td><td>Oggetto pericoloso</td><td>Porto lecito solo se circostanze lo giustificano</td></tr>
+        <tr><td>Armi antiche da taglio/punta</td><td>Antiche</td><td>Fabbricate prima del 1900</td></tr>
+        <tr><td>Armi da fuoco antiche</td><td>Antiche</td><td>Fabbricate prima del 1870</td></tr>
+        <tr><td>Arma da fuoco a forma di bastone da passeggio</td><td>Arma vietata</td><td>Importazione: aut. eccezionale Ufficio centrale armi</td></tr>
+        <tr><td>Accendino a forma di pistola</td><td>Oggetto simile ad arma</td><td>Importazione: aut. Ufficio centrale armi</td></tr>
+      </tbody>
+    </table>
+    <div class="info-box">
+      <strong>Accessori di arma:</strong> Puntatori notturni, puntatori laser, silenziatori e lanciagranate (costruiti come parte supplementare) sono considerati <strong>accessori</strong>.
+    </div>
+    <div class="danger-box">
+      <strong>Armi vietate:</strong> Armi per il tiro a raffica · Semiautomatiche a percussione centrale con caricatore ad alta capacità · Semiautomatiche portatili con caricatore > 10 colpi · Semiautomatiche riducibili a meno di 60 cm con calcio pieghevole/telescopico.
+    </div>
+  </div>
+
+  <div class="summary-section">
+    <h3>🔧 Tecnica delle Armi</h3>
+    <table class="summary-table">
+      <thead><tr><th>Termine</th><th>Significato</th></tr></thead>
+      <tbody>
+        <tr><td>DA</td><td>Double Action — grilletto a doppia azione</td></tr>
+        <tr><td>DAO</td><td>Double Action Only — soltanto doppia azione</td></tr>
+        <tr><td>Alzo aperto</td><td>Termine generico per alzo e mirino</td></tr>
+        <tr><td>Differenza pistola/rivoltella</td><td>Pistola = caricatore; Rivoltella = tamburo</td></tr>
+        <tr><td>Scatto rivoltelle moderne</td><td>Double Action</td></tr>
+        <tr><td>Armi a bascula</td><td>Combinato palla-pallini, Drilling, Doppietta</td></tr>
+        <tr><td>Parti essenziali pistola</td><td>Impugnatura, Canna, Culatta</td></tr>
+        <tr><td>Parti essenziali revolver</td><td>Telaio, Tamburo, Canna</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary-section">
+    <h3>💥 Balistica e Munizioni</h3>
+    <table class="summary-table">
+      <thead><tr><th>Argomento</th><th>Risposta</th></tr></thead>
+      <tbody>
+        <tr><td>Unità di misura velocità proiettile (V0)</td><td>m/s e ft/s</td></tr>
+        <tr><td>Unità di misura energia proiettile</td><td>ft/lbs e joule</td></tr>
+        <tr><td>Gittata max .22 Long Rifle</td><td>1.800 metri</td></tr>
+        <tr><td>Gittata max pistola/rivoltella</td><td>2.000 metri</td></tr>
+        <tr><td>Componenti cartuccia a palla</td><td>Proiettile, carica di polvere, bossolo, innesco</td></tr>
+        <tr><td>Tipi di innesco moderni</td><td>Innesco centrale, innesco anulare</td></tr>
+        <tr><td>Polvere nelle cartucce moderne</td><td>Nitrocellulosa (senza fumo)</td></tr>
+        <tr><td>Munizione marcante</td><td>Solo innesco + carica marcante, nessun proiettile</td></tr>
+        <tr><td>Proiettile a nocciolo duro</td><td>Nocciolo in acciaio/wolframio, alta potenza perforante</td></tr>
+        <tr><td>Nocciolo proiettile standard</td><td>Piombo legato con antimonio / piombo</td></tr>
+        <tr><td>Residui di sparo</td><td>Impiombatura, residui di nichel o tombacco nella canna</td></tr>
+        <tr><td>Cleanfire / Sintox</td><td>Munizione senza metalli pesanti, fondello rivestito</td></tr>
+        <tr><td>Cartucce per pistola</td><td>9mm Makarov, 6,35mm Browning, 9mm Police</td></tr>
+        <tr><td>Cartucce per rivoltella</td><td>.45 Colt, .38 Special, .454 Casull</td></tr>
+        <tr><td>.38 Special in rivoltella .357 Magnum?</td><td>Sì, compatibile</td></tr>
+        <tr><td>9mm Parabellum = ?</td><td>9mm Luger = cart. pist. 14 = 9x19</td></tr>
+        <tr><td>9mm corto in anglosassone</td><td>9mm Browning / .380 Auto</td></tr>
+        <tr><td>7,65 Parabellum = .30 Luger?</td><td>Sì, nessuna differenza</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary-section">
+    <h3>⚖️ Responsabilità Penale — Punti Chiave</h3>
+    <table class="summary-table">
+      <thead><tr><th>Reato</th><th>Descrizione</th></tr></thead>
+      <tbody>
+        <tr><td>Omicidio colposo</td><td>Uccisione per negligenza (es. colpo accidentale durante pulizia arma)</td></tr>
+        <tr><td>Omicidio intenzionale</td><td>Uccisione volontaria senza legittima difesa</td></tr>
+        <tr><td>Istigazione all'omicidio</td><td>Chiedere a qualcuno di uccidere: stessa pena dell'autore</td></tr>
+        <tr><td>Falsità in documenti</td><td>Presentare permesso d'acquisto falso o modificato</td></tr>
+        <tr><td>Casellario giudiziale</td><td>Registra condanne per crimini e delitti</td></tr>
+        <tr><td>Querela</td><td>Può essere ritirata dalla persona che l'ha sporta</td></tr>
+        <tr><td>Custodia imprudente</td><td>Responsabilità se terzi usano l'arma non custodita con diligenza</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- fine riassunto -->
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ===== DATI =====
+const questions = [
+    { id:1, category:"Classificazione", q:"Lo spray di autodifesa contenente la sostanza irritante CN è un'arma ai sensi della legge sulle armi?", a:"Sì, questo spray è un'arma e può essere acquistato solo con un permesso d'acquisto." },
+    { id:2, category:"Munizioni", q:"L'art. 26 OArm vieta determinate munizioni. Si possono ancora utilizzare le munizioni rimaste in scorta e che ricadono sotto l'egida del citato art.?", a:"Sì, l'ordinanza non ne disciplina l'utilizzazione." },
+    { id:3, category:"Porto e Dogana", q:"Desidera introdurre in Svizzera una o più armi a gas (volata non chiusa). A quali condizioni ciò è consentito?", a:"È necessaria un'autorizzazione d'importazione, poiché le armi a gas sono considerate armi in virtù della legge sulle armi. Al momento dell'importazione, le armi a gas devono essere dichiarate alla dogana." },
+    { id:4, category:"Permessi e Contratti", q:"Quali indicazioni deve contenere per legge il contratto scritto per l'alienazione di un'arma?", a:"Cognome, nome, data di nascita, indirizzo e firma della persona che acquista l'arma. Tipo d'arma, fabbricante, denominazione, numero di matricola nonché data e luogo dell'alienazione. Cognome, nome, data di nascita, indirizzo e firma della persona che aliena l'arma." },
+    { id:5, category:"Permessi e Contratti", q:"Da privato ha venduto un'arma a un amico. Per quanto tempo deve conservare il contratto scritto?", a:"Almeno 10 anni." },
+    { id:6, category:"Permessi e Contratti", q:"Quante armi può acquistare in una volta presso lo stesso commerciante con un permesso d'acquisto d'armi?", a:"Il numero autorizzato, al massimo 3." },
+    { id:7, category:"Classificazione", q:"In viaggio all'estero trova un pugnale con lama simmetrica appuntita di 20 cm. Può introdurlo sul territorio svizzero?", a:"Sì, con un'autorizzazione d'importazione dell'Ufficio centrale Armi e un'autorizzazione eccezionale emessa dal Cantone." },
+    { id:8, category:"Classificazione", q:"In viaggio all'estero trova un pugnale lungo 20 cm, asimmetrico, dotato di dorso a sega. Può importarlo in Svizzera?", a:"Sì, il pugnale asimmetrico non è considerato un'arma e può essere importato senza autorizzazione." },
+    { id:9, category:"Classificazione", q:"Ha ereditato un coltello a serramanico non automatico azionabile con una mano, aperto > 12 cm, lama sporge > 8 cm. Può portarlo?", a:"Sì, se le circostanze lo giustificano. Se no il porto di oggetti pericolosi è abusivo." },
+    { id:10, category:"Classificazione", q:"Ha ereditato un coltello a serramanico non automatico azionabile con una mano, aperto < 12 cm, lama 5 cm. Può portarlo?", a:"Sì, se le circostanze lo giustificano. Se no il porto di oggetti pericolosi è abusivo." },
+    { id:11, category:"Permessi e Contratti", q:"Un cittadino svizzero desidera acquistare un moschetto 31. Serve il permesso d'acquisto di armi?", a:"No." },
+    { id:12, category:"Permessi e Contratti", q:"Desidera acquistare un'arma modificata da automatica a semiautomatica (non arma d'ordinanza svizzera). Di cos'ha bisogno?", a:"Di un'autorizzazione cantonale eccezionale." },
+    { id:13, category:"Permessi e Contratti", q:"In un negozio d'armi desidera acquistare un fucile a pompa. Serve il permesso d'acquisto di armi?", a:"Sì." },
+    { id:14, category:"Porto e Dogana", q:"Possiede una pistola da sport (.22 l.r.) e va all'estero a una gara. Deve dichiarare l'arma alla dogana al rientro in Svizzera?", a:"No, se l'arma è introdotta con una carta europea d'arma da fuoco." },
+    { id:15, category:"Permessi e Contratti", q:"È possibile acquistare un fucile d'assalto d'ordinanza in condizioni originali?", a:"Sì, con un'autorizzazione cantonale eccezionale." },
+    { id:16, category:"Porto e Dogana", q:"Possiede un'arma a gas con dispositivo per il lancio di pezzi pirotecnici (tubo di lancio). Può portarla in pubblico per autodifesa?", a:"Sì, se sono in possesso di un permesso di porto di armi." },
+    { id:17, category:"Porto e Dogana", q:"In che modo e in quali circostanze è possibile trasportare un'arma ad aria compressa o a CO2?", a:"Quando ci si reca a una manifestazione specializzata." },
+    { id:18, category:"Permessi e Contratti", q:"È possibile acquistare un'arma corta da fuoco per il tiro a raffica?", a:"Sì, con un'autorizzazione cantonale eccezionale." },
+    { id:19, category:"Classificazione", q:"Possiede un coltello non automatico azionabile con una mano, aperto > 12 cm, lama > 5 cm. Lo si può portare di notte?", a:"Sì, se le circostanze lo giustificano. No, perché di notte in luogo non giustificabile si tratta di porto abusivo di oggetto pericoloso e l'arma può essere sequestrata." },
+    { id:20, category:"Classificazione", q:"Secondo la legge, quali armi sono considerate antiche?", a:"Armi da taglio, da punta e altre fabbricate prima del 1900. Armi da fuoco fabbricate prima del 1870." },
+    { id:21, category:"Classificazione", q:"All'estero trova un'arma da fuoco sotto forma di bastone da passeggio. È permessa l'introduzione in Svizzera?", a:"Sì, con un'autorizzazione eccezionale dell'Ufficio centrale armi." },
+    { id:22, category:"Classificazione", q:"All'estero trova un bastone da passeggio con lama affilata simmetrica lunga 25 cm che fuoriesce a scatto. È permessa l'introduzione in Svizzera?", a:"Sì, con un'autorizzazione eccezionale dell'Ufficio centrale armi." },
+    { id:23, category:"Classificazione", q:"All'estero trova un oggetto che sembra una pistola ma è in realtà un accendino. È permessa l'introduzione in Svizzera?", a:"Sì, con autorizzazione dell'Ufficio centrale armi." },
+    { id:24, category:"Permessi e Contratti", q:"Eredita una collezione con un'arma portatile per tiro a raffica modificata in semiautomatica. Può portarla?", a:"Sì, se sono in possesso di una corrispondente autorizzazione cantonale eccezionale." },
+    { id:25, category:"Classificazione", q:"Quali di questi oggetti sono considerati accessori di un'arma?", a:"Puntatori notturni e loro parti costruite appositamente. Puntatori laser e loro parti. Silenziatore e sue parti. Lanciagranate costruiti come parte supplementare di un'arma da fuoco." },
+    { id:26, category:"Permessi e Contratti", q:"Quali sono le condizioni legali per il rilascio di un permesso d'acquisto di armi?", a:"Aver compiuto 18 anni. Non essere iscritto nel casellario giudiziale per reati violenti o delitti ripetuti. Non essere sotto curatela generale. Non costituire un pericolo per sé o per terzi." },
+    { id:27, category:"Permessi e Contratti", q:"Come persona privata, vuole vendere la sua Glock 17 con caricatore standard. Qual è la procedura?", a:"Controllare identità e età dell'acquirente con documento ufficiale. Vendere solo se l'acquirente esibisce permesso d'acquisto valido. Rispedire copia del permesso d'acquisto all'autorità entro 30 giorni." },
+    { id:28, category:"Permessi e Contratti", q:"Possiede un'arma modificata da automatica a semiautomatica. Come deve custodirla?", a:"L'otturatore è da custodire sottochiave, separatamente dal resto dell'arma." },
+    { id:29, category:"Permessi e Contratti", q:"Per quanto tempo al massimo può durare un permesso di porto d'armi?", a:"Per 5 anni." },
+    { id:30, category:"Porto e Dogana", q:"Cosa deve fare attenzione quando porta l'arma allo stand di tiro (porto d'armi non vale per quel tipo di arma)?", a:"Trasportare l'arma solo per il tempo adeguato. Niente munizioni nel caricatore. Arma e munizioni devono essere separate." },
+    { id:31, category:"Porto e Dogana", q:"Cosa deve fare attenzione quando porta l'arma allo stand di tiro?", a:"Niente munizioni nel caricatore. Trasportare l'arma solo per il tempo adeguato. Arma e munizioni devono essere separate." },
+    { id:32, category:"Classificazione", q:"Prima del 1.1.1999 ha acquistato un pugnale simmetrico con lama di 25 cm. Lo può portare dopo tale data?", a:"No, eccetto se dispongo di un corrispondente permesso di porto d'armi." },
+    { id:33, category:"Permessi e Contratti", q:"Vuole vendere privatamente un'arma corta con caricatore da 18 colpi a un cittadino francese con titolo di soggiorno svizzero. Cosa tenere a mente?", a:"Chiedere all'acquirente il permesso d'acquisto di armi. Controllare identità e età con documento ufficiale." },
+    { id:34, category:"Permessi e Contratti", q:"Vuole vendere la sua SIG P226 con caricatore da 32 colpi a un cittadino tedesco senza titolo di soggiorno svizzero. Cosa tenere a mente?", a:"Controllare identità e età con documento ufficiale. L'acquirente deve presentare un'autorizzazione eccezionale." },
+    { id:35, category:"Porto e Dogana", q:"Possiede una pistola da sport (9mm Para) e va all'estero a una gara. Deve dichiarare l'arma alla dogana al rientro?", a:"No." },
+    { id:36, category:"Legittima Difesa", q:"Vede qualcuno rompere il finestrino dell'auto del vicino e sedersi al volante. Cosa può fare?", a:"Bucare con il mio coltello una ruota dell'auto per impedire che venga rubata." },
+    { id:37, category:"Legittima Difesa", q:"È autorizzato a portare una pistola. Durante un pattugliamento notturno viene minacciato verbalmente da un gruppo di ragazzi. Cosa può fare?", a:"Aprire la giacca per mostrare l'arma, se dispongo di un permesso valido di porto di armi." },
+    { id:38, category:"Legittima Difesa", q:"Durante una retata della polizia viene arrestato come agente di sicurezza. Ritiene di non aver nulla da farsi rimproverare e estrae l'arma. È lecito?", a:"No, perché non si tratta di un'aggressione ingiusta." },
+    { id:39, category:"Legittima Difesa", q:"Un uomo coglie la moglie in flagrante adulterio e uccide il rivale. Il suo comportamento è legale?", a:"No, perché il marito non ha subito alcuna aggressione ingiusta." },
+    { id:40, category:"Responsabilità Penale", q:"Un uomo spara a uno spacciatore uccidendolo per vendicare il figlio morto di overdose. Che conseguenze subirà?", a:"Probabilmente perseguito per omicidio intenzionale. Punito per possesso illecito di armi se non ha permesso di porto valido." },
+    { id:41, category:"Legittima Difesa", q:"È una proporzionata legittima difesa se la vittima uccide l'aggressore che la attacca ingiustamente?", a:"Sì, se non c'era altro modo di respingere l'aggressione." },
+    { id:42, category:"Stato di Necessità", q:"Nelle sue vicinanze un toro libero carica un gruppo di bambini. Le è consentito sparare sul toro?", a:"Sì, se mi sono prima assicurato che sparando non metto in pericolo nessuna persona." },
+    { id:43, category:"Responsabilità Penale", q:"Pulendo l'arma parte un colpo che uccide un vicino. Per quale reato sarà perseguito?", a:"Per omicidio colposo, perché ho ucciso una persona per negligenza." },
+    { id:44, category:"Responsabilità Penale", q:"A chiede a un amico armato di uccidere la moglie sospettata di tradimento. Verrà punito se l'amico lo fa?", a:"Sì, sarà probabilmente condannato per istigazione all'omicidio e incorrerà nella pena applicabile all'autore dell'omicidio." },
+    { id:45, category:"Responsabilità Penale", q:"Una persona che ha sporto querela può ritirarla?", a:"Sì." },
+    { id:46, category:"Responsabilità Penale", q:"Un agente di sicurezza mostra la pistola a un amico al ristorante. L'amico la prende e ferisce qualcuno. L'agente è corresponsabile?", a:"Sì, perché l'arma non è stata custodita con diligenza. Sì, perché per imprevidenza colpevole una persona è stata ferita." },
+    { id:47, category:"Legittima Difesa", q:"Di notte nota ragazzi che fanno graffiti e spara un colpo d'avvertimento per farli smettere. È lecito?", a:"No." },
+    { id:48, category:"Legittima Difesa", q:"Dei giovani attraversano con motorini una proprietà privata vietata. Estrae la pistola per fermarli. È lecito?", a:"No." },
+    { id:49, category:"Legittima Difesa", q:"Davanti a un night club c'è una rissa. Per calmarla estrae l'arma e spara un colpo d'avvertimento. È lecito?", a:"No, l'impiego di un'arma da fuoco non è consentita contro gli schiamazzi notturni e il colpo d'avvertimento potrebbe mettere in pericolo un terzo non implicato." },
+    { id:50, category:"Legittima Difesa", q:"Quale affermazione sulla legittima difesa è corretta?", a:"Il diritto alla legittima difesa può venir esercitato solo durante l'aggressione." },
+    { id:51, category:"Responsabilità Penale", q:"Cosa si registra nel casellario giudiziale federale?", a:"Le condanne per i crimini e i delitti." },
+    { id:52, category:"Responsabilità Penale", q:"Quando si incorre nella fattispecie penale della falsità in documenti?", a:"Quando l'acquirente presenta al commerciante d'armi un permesso d'acquisto falso o modificato." },
+    { id:53, category:"Legittima Difesa", q:"È permesso installare un dispositivo di protezione a tiro automatico in una casa già svaligiata quattro volte?", a:"No, questa procedura è sproporzionata." },
+    { id:54, category:"Legittima Difesa", q:"Si può mettere in pericolo la vita di un terzo estraneo per difendere il proprio patrimonio?", a:"No, perché la vita e l'integrità fisica hanno di principio più importanza dei valori patrimoniali." },
+    { id:55, category:"Legittima Difesa", q:"Qualcuno la scippa. Lei ha porto d'armi e sale su un'auto intimando al conducente di inseguire il ladro. È legale?", a:"No, terzi estranei non devono venir coinvolti per recuperare dei valori patrimoniali." },
+    { id:56, category:"Legittima Difesa", q:"Provoca un cane pastore con un bastone finché non viene aggredito, poi lo abbatte sparandogli. È lecito?", a:"No, probabilmente sarò perseguito per danneggiamento e per aver esposto a pericolo terzi, visto che ho provocato io stesso l'aggressione." },
+    { id:57, category:"Legittima Difesa", q:"Il cane del vicino le ruba l'arrosto dal piatto. È autorizzato a sparare sul cane in fuga?", a:"No, questo modo d'agire è sproporzionato (eccesso di legittima difesa) e rischio di venir perseguito per danneggiamento." },
+    { id:58, category:"Legittima Difesa", q:"In un caso di legittima difesa i mezzi per difendersi da un'aggressione ingiusta devono:", a:"essere proporzionati all'aggressione." },
+    { id:59, category:"Legittima Difesa", q:"Una persona disarmata le sottrae il portafoglio e fugge. Lei estrae la pistola e le spara. È legale?", a:"No, sarò presumibilmente perseguito per reato contro la vita e l'integrità fisica, per eccesso di legittima difesa." },
+    { id:60, category:"Legittima Difesa", q:"Sorprende a casa sua una persona chiaramente disarmata. Come deve reagire avendo una pistola?", a:"Tenere sotto tiro la persona finché arriva la polizia." },
+    { id:61, category:"Legittima Difesa", q:"Durante una rissa una persona fisicamente più forte la prende a pugni e calci mentre è a terra. Come può difendersi?", a:"Sono autorizzato a estrarre la pistola per percuotere l'avversario. Prendere la pistola per mostrargli che sono armato." },
+    { id:62, category:"Legittima Difesa", q:"Di notte sorprende due ladri in casa. Uno estrae la pistola. Come si deve comportare lei che è pure armato?", a:"Ho il diritto di mettere fuori combattimento il ladro armato sparando un colpo mirato. Estraggo la mia arma poiché si tratta di legittima difesa." },
+    { id:63, category:"Legittima Difesa", q:"Nota un gruppo che colpisce a pugni e calci un uomo già a terra in una pozza di sangue. Come si deve comportare avendo una pistola?", a:"Estraggo la mia pistola e ordino ai ragazzi di allontanarsi dal ferito." },
+    { id:64, category:"Legittima Difesa", q:"All'apertura del negozio scopre un ladro che fugge con la cassa. Lo insegue, poi gli spara. Il ladro è ferito gravemente. È legale?", a:"No, sarò probabilmente perseguito per reato contro la vita e l'integrità fisica, avendo oltrepassato i limiti della legittima difesa." },
+    { id:65, category:"Legittima Difesa", q:"Un cliente ruba la cassa e fugge. Il commerciante armato intima a un conducente di inseguirlo. È legale?", a:"No, il commerciante non ha diritto di mettere in pericolo la vita di un terzo estraneo per recuperare la cassa." },
+    { id:66, category:"Responsabilità Penale", q:"Un padre dice per scherzo al figlio sedicenne che il vicino meriterebbe di essere impallinato. Il giorno dopo il figlio spara pallini di gomma causando gravi lesioni. Come giudicare?", a:"Il padre verrà probabilmente perseguito per custodia imprudente dell'arma e delle munizioni. Il figlio dovrà rispondere di lesioni corporali gravi." },
+    { id:67, category:"Legittima Difesa", q:"A provoca B ubriaco. B colpisce A con un pugno. A si difende e poi pugnala B due volte. È legale il comportamento di A?", a:"No, A sarà probabilmente perseguito per lesioni corporali gravi avendo lui stesso provocato B." },
+    { id:68, category:"Stato di Necessità", q:"Accompagna un cliente in escursione. Un grosso cane blocca a terra un altro escursionista. Abbatte il cane sparandogli. È legittimo?", a:"Sì, si tratta di un atto proporzionato di legittima difesa." },
+    { id:69, category:"Legittima Difesa", q:"Nota un rapinatore che ha scippato la borsetta a un'anziana e corre verso di lei. Cosa può fare avendo una pistola?", a:"Dato che il rapinatore non minaccia la vita di nessuno, occorre adottare una misura proporzionata che non preveda l'impiego dell'arma." },
+    { id:70, category:"Legittima Difesa", q:"Sente richieste di aiuto da una casa, entra con la pistola in mano e trova il padrone davanti alla TV. Il suo comportamento è lecito?", a:"Sì, se era ragionevole credere di essere di fronte a un caso di legittima difesa, ammesso che si sia accertato di non mettere in pericolo nessuno con lo sparo." },
+    { id:71, category:"Stato di Necessità", q:"Un bambino è bloccato sul balcone di una casa in fiamme. La porta è chiusa. Spara sulla serratura per salvarlo. È legale?", a:"Sì, ho agito in stato di necessità. Ho diritto di danneggiare la porta dopo essermi accertato di non colpire nessuno con il colpo." },
+    { id:72, category:"Legittima Difesa", q:"Qual è la definizione di legittima difesa?", a:"Il diritto di respingere un'aggressione ingiusta con mezzi proporzionali alle circostanze." },
+    { id:73, category:"Legittima Difesa", q:"Come decide il giudice se l'aggredito eccede i limiti della legittima difesa?", a:"Attenua la pena secondo il suo libero apprezzamento o decide perché l'imputato vada esente da pena." },
+    { id:74, category:"Stato di Necessità", q:"Qual è la definizione di legittimo stato di necessità?", a:"Chiunque commette un reato per preservare un bene giuridico proprio o altrui da un pericolo imminente e non altrimenti evitabile agisce lecitamente se in tal modo salvaguarda interessi preponderanti." },
+    { id:75, category:"Stato di Necessità", q:"Per la strada è inseguito da un malintenzionato con un coltello. Per fuggire ruba una bicicletta. Ha commesso un furto?", a:"No, perché l'azione è proporzionata allo stato di necessità." },
+    { id:76, category:"Legittima Difesa", q:"Sorprende un ladro che esce di casa con i suoi gioielli. Il ladro fugge. Lei ha porto d'armi e gli spara. Ne ha il diritto?", a:"No, sparare è una reazione sproporzionata. Così oltrepasso i limiti della legittima difesa." },
+    { id:77, category:"Legittima Difesa", q:"È proporzionata la legittima difesa sparando a chi, non armato, vuole rubare o danneggiare i propri beni?", a:"No." },
+    { id:78, category:"Legittima Difesa", q:"Si può parlare di legittima difesa quando si respinge adeguatamente un attentato alla propria vita e integrità fisica?", a:"Sì, se si è aggrediti in maniera illecita da una persona." },
+    { id:79, category:"Legittima Difesa", q:"Un criminale minaccia di picchiarla se non gli consegna il portafoglio. Lei lo colpisce con il bastone da combattimento ferendolo gravemente. È legale?", a:"No, la reazione è sproporzionata. Molto probabilmente si aprirà un'inchiesta penale contro di me per gravi lesioni personali." },
+    { id:80, category:"Tecnica delle Armi", q:"Qual è la differenza principale fra pistola e rivoltella?", a:"Le pistole in generale hanno il caricatore, le rivoltelle il tamburo." },
+    { id:81, category:"Tecnica delle Armi", q:"Cosa s'intende con il termine \"DA\"?", a:"Grilletto a doppia azione." },
+    { id:82, category:"Tecnica delle Armi", q:"Quale sistema di scatto viene generalmente usato nelle rivoltelle moderne?", a:"Scatto \"double action\"." },
+    { id:83, category:"Tecnica delle Armi", q:"Quali fra le armi menzionate sono del tipo a bascula?", a:"Combinato palla-pallini. Drilling. Doppietta." },
+    { id:84, category:"Tecnica delle Armi", q:"Quali sono le parti essenziali di una pistola?", a:"L'impugnatura. La canna. La culatta." },
+    { id:85, category:"Tecnica delle Armi", q:"Cosa s'intende generalmente con il termine \"alzo aperto\"?", a:"Il termine generico per alzo e mirino." },
+    { id:86, category:"Tecnica delle Armi", q:"Cosa significa la denominazione \"DAO\" per pistole?", a:"Double Action Only (soltanto doppia azione)." },
+    { id:87, category:"Tecnica delle Armi", q:"Quali sono le parti essenziali di un revolver?", a:"Il telaio. Il tamburo. La canna." },
+    { id:88, category:"Tecnica delle Armi", q:"Quali di questi tipi di armi sono considerati vietati?", a:"Armi da fuoco per il tiro a raffica. Armi da fuoco semiautomatiche a percussione centrale, armi corte, con caricatore ad alta capacità. Armi da fuoco semiautomatiche portatili con caricatore > 10 colpi. Armi da fuoco portatili semiautomatiche riducibili a < 60 cm con calcio pieghevole/telescopico." },
+    { id:89, category:"Balistica e Munizioni", q:"Quale unità di misura si usa per calcolare la V0 di un proiettile?", a:"m/s e ft/s." },
+    { id:90, category:"Balistica e Munizioni", q:"Quale unità di misura si usa per calcolare l'energia del proiettile?", a:"ft/lbs e joule." },
+    { id:91, category:"Balistica e Munizioni", q:"Cosa significano le denominazioni \"Cleanfire\", \"Sintox\" ecc.?", a:"Munizione che usa inneschi non contenenti metalli pesanti e con il fondello del proiettile rivestito." },
+    { id:92, category:"Balistica e Munizioni", q:"Quali fra le cartucce elencate sono di norma cartucce per pistola?", a:"9 mm Makarov. 6,35 mm Browning. 9 mm Police." },
+    { id:93, category:"Balistica e Munizioni", q:"Quali fra le cartucce elencate sono di norma cartucce per rivoltella?", a:".45 Colt. .38 Special. .454 Casull." },
+    { id:94, category:"Balistica e Munizioni", q:"Qual è la gittata massima approssimativa di una cartuccia .22 Long Rifle?", a:"1'800 metri." },
+    { id:95, category:"Balistica e Munizioni", q:"Qual è la gittata massima approssimativa delle cartucce di pistola e di rivoltella?", a:"2'000 metri." },
+    { id:96, category:"Balistica e Munizioni", q:"Quali sono i componenti principali di una cartuccia a palla?", a:"Proiettile. Carica di polvere. Bossolo. Innesco." },
+    { id:97, category:"Balistica e Munizioni", q:"Quali diversi generi d'innesco vengono ancora usati nelle cartucce moderne?", a:"Innesco centrale. Innesco anulare." },
+    { id:98, category:"Balistica e Munizioni", q:"Quale polvere viene maggiormente usata nelle moderne cartucce a palla?", a:"Polvere di nitrocellulosa (senza fumo)." },
+    { id:99, category:"Balistica e Munizioni", q:"Cosa s'intende con il termine \"munizione marcante\"?", a:"Munizione contenente soltanto l'innesco e la carica marcante, ma nessun proiettile." },
+    { id:100, category:"Balistica e Munizioni", q:"Che cosa è un proiettile a nocciolo duro?", a:"È un proiettile con nocciolo in materiale duro (es. acciaio, wolframio) costruito per una grande potenza perforante." },
+    { id:101, category:"Balistica e Munizioni", q:"Una cartuccia .38 Special può essere sparata da una rivoltella cal. .357 Magnum?", a:"Sì." },
+    { id:102, category:"Balistica e Munizioni", q:"Quali denominazioni sono usate per designare la cartuccia 9 mm Parabellum?", a:"9 mm Luger. cart. pist. 14. 9x19." },
+    { id:103, category:"Balistica e Munizioni", q:"Qual è la denominazione anglosassone del calibro 9 mm corto?", a:"9 mm Browning. .380 Auto." },
+    { id:104, category:"Balistica e Munizioni", q:"Quale differenza esiste fra una cartuccia calibro 7,65 Parabellum e una .30 Luger?", a:"Nessuna differenza." },
+    { id:105, category:"Balistica e Munizioni", q:"Nella maggior parte dei casi, il nocciolo del proiettile è fatto di:", a:"Piombo legato con antimonio. Piombo." },
+    { id:106, category:"Balistica e Munizioni", q:"Cosa si intende per residui di sparo?", a:"Impiombatura, residui di nichel o tombacco nella canna." }
+];
+
+const catIcons = {
+    "Classificazione": "🔍",
+    "Permessi e Contratti": "📄",
+    "Porto e Dogana": "🛃",
+    "Legittima Difesa": "⚖️",
+    "Stato di Necessità": "🚨",
+    "Responsabilità Penale": "⚠️",
+    "Tecnica delle Armi": "🔧",
+    "Balistica e Munizioni": "💥",
+    "Munizioni": "💥"
+};
+
+// ===== STATE =====
+let memorized = new Set(JSON.parse(localStorage.getItem('memorized') || '[]'));
+let weakList = new Set(JSON.parse(localStorage.getItem('weakList') || '[]'));
+let bestScore = JSON.parse(localStorage.getItem('bestScore') || 'null');
+
+let fcList = [...questions];
+let fcIndex = 0;
+let fcFlipped = false;
+
+let quizList = [];
+let quizIndex = 0;
+let quizCorrect = 0;
+let quizWrong = 0;
+let quizTimer = null;
+let quizTimerVal = 30;
+let quizAnswered = false;
+
+// ===== UTILS =====
+function saveState() {
+    localStorage.setItem('memorized', JSON.stringify([...memorized]));
+    localStorage.setItem('weakList', JSON.stringify([...weakList]));
+    if (bestScore !== null) localStorage.setItem('bestScore', JSON.stringify(bestScore));
+}
+
+function getCategories() {
+    const cats = [...new Set(questions.map(q => q.category))];
+    return cats;
+}
+
+function showToast(msg, type='') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'show ' + type;
+    setTimeout(() => { t.className = ''; }, 2500);
+}
+
+function showSection(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('sec-' + name).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const names = ['dashboard','flashcard','quiz','lista','riassunto'];
+    tabs[names.indexOf(name)].classList.add('active');
+    if (name === 'lista') renderList();
+    if (name === 'flashcard') initFlashcards();
+    if (name === 'dashboard') updateDashboard();
+}
+
+// ===== DASHBOARD =====
+function updateDashboard() {
+    const mem = memorized.size;
+    const pct = Math.round(mem / questions.length * 100);
+    document.getElementById('kpi-mem').textContent = mem;
+    document.getElementById('kpi-mem-pct').textContent = pct + '% del totale';
+    document.getElementById('kpi-todo').textContent = questions.length - mem;
+    document.getElementById('global-progress-fill').style.width = pct + '%';
+    document.getElementById('hdr-memorized').textContent = '✓ ' + mem + ' memorizzate';
+    if (bestScore !== null) {
+        document.getElementById('kpi-best').textContent = bestScore.c + '/' + bestScore.t;
+        document.getElementById('kpi-best-sub').textContent = Math.round(bestScore.c/bestScore.t*100) + '% corretto';
+        document.getElementById('hdr-score').textContent = 'Quiz: ' + Math.round(bestScore.c/bestScore.t*100) + '%';
+    }
+    renderCatGrid();
+    renderCatProgress();
+}
+
+function renderCatGrid() {
+    const cats = getCategories();
+    const grid = document.getElementById('cat-grid');
+    grid.innerHTML = '';
+    cats.forEach(cat => {
+        const total = questions.filter(q => q.category === cat).length;
+        const done = questions.filter(q => q.category === cat && memorized.has(q.id)).length;
+        const pct = Math.round(done / total * 100);
+        const icon = catIcons[cat] || '📌';
+        const btn = document.createElement('div');
+        btn.className = 'cat-btn';
+        btn.innerHTML = `<span class="cat-icon">${icon}</span>${cat}<div class="cat-count">${total} domande · ${done} memorizzate</div><div class="cat-progress-mini"><div class="cat-progress-mini-fill" style="width:${pct}%"></div></div>`;
+        btn.onclick = () => { startFlashcardCat(cat); };
+        grid.appendChild(btn);
+    });
+}
+
+function renderCatProgress() {
+    const cats = getCategories();
+    const list = document.getElementById('cat-progress-list');
+    list.innerHTML = '';
+    cats.forEach(cat => {
+        const total = questions.filter(q => q.category === cat).length;
+        const done = questions.filter(q => q.category === cat && memorized.has(q.id)).length;
+        const pct = Math.round(done / total * 100);
+        const icon = catIcons[cat] || '📌';
+        const div = document.createElement('div');
+        div.style.cssText = 'margin-bottom:10px;';
+        div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:0.85rem;font-weight:600;">${icon} ${cat}</span><span style="font-size:0.78rem;color:var(--muted);">${done}/${total} (${pct}%)</span></div><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;background:linear-gradient(90deg,var(--green),#1e8449);border-radius:4px;width:${pct}%;transition:width 0.4s;"></div></div>`;
+        list.appendChild(div);
+    });
+}
+
+// ===== POPULATE SELECTS =====
+function populateSelects() {
+    const cats = getCategories();
+    ['fc-cat-filter', 'quiz-cat-filter', 'list-chips'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.tagName === 'SELECT') {
+            cats.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = (catIcons[cat] || '') + ' ' + cat;
+                el.appendChild(opt);
+            });
+        }
+    });
+    // chips
+    const chipRow = document.getElementById('list-chips');
+    chipRow.innerHTML = '';
+    const allChip = document.createElement('div');
+    allChip.className = 'chip active';
+    allChip.textContent = 'Tutte';
+    allChip.dataset.cat = 'all';
+    allChip.onclick = () => { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); allChip.classList.add('active'); filterList(); };
+    chipRow.appendChild(allChip);
+    cats.forEach(cat => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = (catIcons[cat] || '') + ' ' + cat;
+        chip.dataset.cat = cat;
+        chip.onclick = () => { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); chip.classList.add('active'); filterList(); };
+        chipRow.appendChild(chip);
+    });
+}
+
+// ===== FLASHCARD =====
+function initFlashcards() {
+    const cat = document.getElementById('fc-cat-filter').value;
+    const onlyUnmem = document.getElementById('fc-only-unmem').checked;
+    fcList = questions.filter(q => {
+        if (cat !== 'all' && q.category !== cat) return false;
+        if (onlyUnmem && memorized.has(q.id)) return false;
+        return true;
+    });
+    if (fcList.length === 0) {
+        fcList = questions;
+        showToast('Nessuna domanda trovata, mostro tutte.', '');
+    }
+    fcIndex = 0;
+    fcFlipped = false;
+    renderFlashcard();
+}
+
+function shuffleFlashcards() {
+    for (let i = fcList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [fcList[i], fcList[j]] = [fcList[j], fcList[i]];
+    }
+    fcIndex = 0;
+    fcFlipped = false;
+    renderFlashcard();
+    showToast('🔀 Flashcard mescolate!');
+}
+
+function renderFlashcard() {
+    if (fcList.length === 0) return;
+    const q = fcList[fcIndex];
+    document.getElementById('fc-counter').textContent = `Domanda ${fcIndex + 1} di ${fcList.length}`;
+    document.getElementById('fc-cat-tag').textContent = (catIcons[q.category] || '') + ' ' + q.category;
+    document.getElementById('fc-cat-tag-back').textContent = (catIcons[q.category] || '') + ' ' + q.category;
+    document.getElementById('fc-question').textContent = q.q;
+    document.getElementById('fc-answer').textContent = q.a;
+    const card = document.getElementById('flashcard');
+    card.classList.remove('flipped');
+    fcFlipped = false;
+}
+
+function flipCard() {
+    const card = document.getElementById('flashcard');
+    if (fcFlipped) { card.classList.remove('flipped'); fcFlipped = false; }
+    else { card.classList.add('flipped'); fcFlipped = true; }
+}
+
+function fcNext() {
+    if (fcIndex < fcList.length - 1) { fcIndex++; renderFlashcard(); }
+    else { showToast('🎉 Hai completato tutte le flashcard!', 'green'); }
+}
+
+function fcPrev() {
+    if (fcIndex > 0) { fcIndex--; renderFlashcard(); }
+}
+
+function fcFeedback(knew) {
+    const q = fcList[fcIndex];
+    if (knew) {
+        memorized.add(q.id);
+        weakList.delete(q.id);
+        showToast('✓ Segnata come memorizzata!', 'green');
+    } else {
+        weakList.add(q.id);
+        showToast('⚠ Segnata per il ripasso!', 'red');
+    }
+    saveState();
+    updateDashboard();
+    setTimeout(() => fcNext(), 400);
+}
+
+function startFlashcardAll() {
+    showSection('flashcard');
+    document.getElementById('fc-cat-filter').value = 'all';
+    document.getElementById('fc-only-unmem').checked = false;
+    initFlashcards();
+}
+
+function startFlashcardCat(cat) {
+    showSection('flashcard');
+    document.getElementById('fc-cat-filter').value = cat;
+    document.getElementById('fc-only-unmem').checked = false;
+    initFlashcards();
+}
+
+// ===== QUIZ =====
+function getQuizQuestions() {
+    const cat = document.getElementById('quiz-cat-filter').value;
+    const count = parseInt(document.getElementById('quiz-count').value);
+    const mode = document.getElementById('quiz-mode').value;
+    let pool = questions.filter(q => cat === 'all' || q.category === cat);
+    if (mode === 'weak') pool = pool.filter(q => weakList.has(q.id));
+    if (pool.length === 0) pool = questions;
+    // shuffle
+    for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, Math.min(count, pool.length));
+}
+
+function startQuizAll() {
+    showSection('quiz');
+    document.getElementById('quiz-cat-filter').value = 'all';
+    document.getElementById('quiz-count').value = '20';
+    document.getElementById('quiz-mode').value = 'normal';
+    startQuiz();
+}
+
+function startQuizWeak() {
+    showSection('quiz');
+    document.getElementById('quiz-mode').value = 'weak';
+    startQuiz();
+}
+
+function startQuiz() {
+    quizList = getQuizQuestions();
+    quizIndex = 0;
+    quizCorrect = 0;
+    quizWrong = 0;
+    document.getElementById('quiz-setup').style.display = 'none';
+    document.getElementById('quiz-result').style.display = 'none';
+    document.getElementById('quiz-area').style.display = 'block';
+    document.getElementById('quiz-qtot').textContent = quizList.length;
+    document.getElementById('quiz-correct-count').textContent = 0;
+    document.getElementById('quiz-wrong-count').textContent = 0;
+    renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+    if (quizIndex >= quizList.length) { showQuizResult(); return; }
+    const q = quizList[quizIndex];
+    quizAnswered = false;
+    document.getElementById('quiz-qnum').textContent = quizIndex + 1;
+    document.getElementById('quiz-cat-label').textContent = (catIcons[q.category] || '') + ' ' + q.category;
+    document.getElementById('quiz-q-text').textContent = q.q;
+    document.getElementById('quiz-prog-fill').style.width = (quizIndex / quizList.length * 100) + '%';
+    document.getElementById('quiz-feedback').className = 'quiz-feedback';
+    document.getElementById('quiz-next-btn').style.display = 'none';
+
+    // Generate options: 1 correct + 3 wrong
+    const correct = q.a;
+    let wrongPool = questions.filter(x => x.id !== q.id).map(x => x.a);
+    // shuffle wrong pool
+    for (let i = wrongPool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [wrongPool[i], wrongPool[j]] = [wrongPool[j], wrongPool[i]];
+    }
+    const wrongs = wrongPool.slice(0, 3);
+    let opts = [correct, ...wrongs];
+    // shuffle opts
+    for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+    }
+    const container = document.getElementById('quiz-options');
+    container.innerHTML = '';
+    opts.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'quiz-option';
+        div.textContent = opt;
+        div.onclick = () => selectQuizAnswer(div, opt, correct, q);
+        container.appendChild(div);
+    });
+
+    // Timer
+    const mode = document.getElementById('quiz-mode').value;
+    if (mode === 'timed') {
+        clearInterval(quizTimer);
+        quizTimerVal = 30;
+        const timerEl = document.getElementById('quiz-timer');
+        timerEl.style.display = 'block';
+        timerEl.textContent = quizTimerVal;
+        timerEl.className = 'timer-badge';
+        quizTimer = setInterval(() => {
+            quizTimerVal--;
+            timerEl.textContent = quizTimerVal;
+            if (quizTimerVal <= 10) timerEl.className = 'timer-badge warning';
+            if (quizTimerVal <= 0) {
+                clearInterval(quizTimer);
+                timeoutQuiz(correct, q);
+            }
+        }, 1000);
+    } else {
+        document.getElementById('quiz-timer').style.display = 'none';
+    }
+}
+
+function selectQuizAnswer(el, chosen, correct, q) {
+    if (quizAnswered) return;
+    quizAnswered = true;
+    clearInterval(quizTimer);
+    const allOpts = document.querySelectorAll('.quiz-option');
+    allOpts.forEach(o => {
+        o.classList.add('disabled');
+        if (o.textContent === correct) o.classList.add('correct');
+    });
+    const fb = document.getElementById('quiz-feedback');
+    if (chosen === correct) {
+        el.classList.add('correct');
+        quizCorrect++;
+        weakList.delete(q.id);
+        fb.className = 'quiz-feedback show correct';
+        fb.innerHTML = '✅ <strong>Corretto!</strong> ' + correct;
+    } else {
+        el.classList.add('wrong');
+        quizWrong++;
+        weakList.add(q.id);
+        fb.className = 'quiz-feedback show wrong';
+        fb.innerHTML = '❌ <strong>Sbagliato.</strong> La risposta corretta era: ' + correct;
+    }
+    document.getElementById('quiz-correct-count').textContent = quizCorrect;
+    document.getElementById('quiz-wrong-count').textContent = quizWrong;
+    document.getElementById('quiz-next-btn').style.display = 'block';
+    saveState();
+}
+
+function timeoutQuiz(correct, q) {
+    quizAnswered = true;
+    const allOpts = document.querySelectorAll('.quiz-option');
+    allOpts.forEach(o => {
+        o.classList.add('disabled');
+        if (o.textContent === correct) o.classList.add('correct');
+    });
+    quizWrong++;
+    weakList.add(q.id);
+    const fb = document.getElementById('quiz-feedback');
+    fb.className = 'quiz-feedback show wrong';
+    fb.innerHTML = '⏱ <strong>Tempo scaduto!</strong> La risposta corretta era: ' + correct;
+    document.getElementById('quiz-wrong-count').textContent = quizWrong;
+    document.getElementById('quiz-next-btn').style.display = 'block';
+    saveState();
+}
+
+function quizNext() {
+    quizIndex++;
+    renderQuizQuestion();
+}
+
+function quizAbort() {
+    clearInterval(quizTimer);
+    document.getElementById('quiz-area').style.display = 'none';
+    document.getElementById('quiz-setup').style.display = 'block';
+}
+
+function showQuizResult() {
+    clearInterval(quizTimer);
+    document.getElementById('quiz-area').style.display = 'none';
+    document.getElementById('quiz-result').style.display = 'block';
+    const total = quizList.length;
+    const pct = Math.round(quizCorrect / total * 100);
+    document.getElementById('res-score').textContent = quizCorrect + '/' + total;
+    let msg = '';
+    if (pct >= 90) msg = '🏆 Eccellente! Sei pronto per l\'esame!';
+    else if (pct >= 75) msg = '👍 Molto bene! Continua a ripassare i punti deboli.';
+    else if (pct >= 60) msg = '📚 Discreto. Ripassa le categorie in cui hai sbagliato.';
+    else msg = '⚠️ Devi studiare ancora. Usa le flashcard per ripassare!';
+    document.getElementById('res-msg').textContent = msg;
+    if (bestScore === null || quizCorrect / total > bestScore.c / bestScore.t) {
+        bestScore = { c: quizCorrect, t: total };
+        saveState();
+    }
+    updateDashboard();
+}
+
+// ===== LISTA =====
+function renderList() {
+    const search = document.getElementById('search-input').value.toLowerCase();
+    const activeChip = document.querySelector('.chip.active');
+    const cat = activeChip ? activeChip.dataset.cat : 'all';
+    const list = document.getElementById('qa-list');
+    list.innerHTML = '';
+    const filtered = questions.filter(q => {
+        if (cat !== 'all' && q.category !== cat) return false;
+        if (search && !q.q.toLowerCase().includes(search) && !q.a.toLowerCase().includes(search)) return false;
+        return true;
+    });
+    if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div>Nessuna domanda trovata per questa ricerca.</div>';
+        return;
+    }
+    filtered.forEach(q => {
+        const item = document.createElement('div');
+        item.className = 'qa-item' + (memorized.has(q.id) ? ' memorized' : '');
+        item.innerHTML = `
+            <div class="qa-question" onclick="toggleQA(this)">
+                <div class="qa-num">${q.id}</div>
+                <span>${q.q}</span>
+                <span class="qa-cat-tag">${catIcons[q.category] || ''} ${q.category}</span>
+                <span class="qa-arrow">▼</span>
+            </div>
+            <div class="qa-answer">
+                <div class="qa-answer-label">✓ Risposta Corretta</div>
+                ${q.a}
+                <div style="margin-top:12px;">
+                    <button class="btn btn-sm ${memorized.has(q.id) ? 'btn-outline' : 'btn-green'}" onclick="toggleMem(${q.id}, this, event)">
+                        ${memorized.has(q.id) ? '✓ Memorizzata' : '+ Segna come memorizzata'}
+                    </button>
+                </div>
+            </div>`;
+        list.appendChild(item);
+    });
+}
+
+function toggleQA(el) {
+    const item = el.closest('.qa-item');
+    const answer = item.querySelector('.qa-answer');
+    const isOpen = answer.classList.contains('open');
+    // close all
+    document.querySelectorAll('.qa-answer.open').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.qa-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) {
+        answer.classList.add('open');
+        item.classList.add('open');
+    }
+}
+
+function toggleMem(id, btn, e) {
+    e.stopPropagation();
+    if (memorized.has(id)) {
+        memorized.delete(id);
+        btn.className = 'btn btn-sm btn-green';
+        btn.textContent = '+ Segna come memorizzata';
+        btn.closest('.qa-item').classList.remove('memorized');
+        showToast('Rimossa dai memorizzati');
+    } else {
+        memorized.add(id);
+        btn.className = 'btn btn-sm btn-outline';
+        btn.textContent = '✓ Memorizzata';
+        btn.closest('.qa-item').classList.add('memorized');
+        showToast('✓ Segnata come memorizzata!', 'green');
+    }
+    saveState();
+    updateDashboard();
+}
+
+function filterList() { renderList(); }
+
+// ===== RESET =====
+function resetProgress() {
+    if (!confirm('Sei sicuro di voler azzerare tutti i progressi?')) return;
+    memorized.clear();
+    weakList.clear();
+    bestScore = null;
+    localStorage.clear();
+    updateDashboard();
+    showToast('🔄 Progressi azzerati');
+}
+
+// ===== INIT =====
+populateSelects();
+updateDashboard();
+initFlashcards();
+</script>
+</body>
+</html>
